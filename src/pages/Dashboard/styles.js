@@ -130,7 +130,7 @@ export const CardTitle = styled.Text`
     font-weight: 700;
 `;
 
-export const Contracts = styled.View``;
+export const Infos = styled.View``;
 
 export const Title = styled.Text`
     font-size: 20px;
@@ -145,8 +145,8 @@ export const ContractTitle = styled.Text`
     font-weight: 700;
 `;
 
-export const Contract = styled.TouchableOpacity`
-    flex-direction: row;
+export const Info = styled.TouchableOpacity`
+    flex-direction: ${props => (props.prospection ? 'column' : 'row')};
     justify-content: space-between;
     align-items: center;
     padding: 16px;
@@ -170,11 +170,18 @@ export const Date = styled.Text`
 `;
 
 export const State = styled.View`
-    background: #79CB39;
+    background: ${props => (
+        props.cod === 2
+        ? "#79CB39"
+        : props.cod === 3
+        ? "#e61919"
+        : "#e5e619"
+    )};
     border-radius: 10px;
     padding: 5px 10px;
     align-items: center;
     justify-content: center;
+    margin:  ${props => (props.prospection ? '16px 0 0' : '0')};
 `;
 
 export const LabelState = styled.Text`

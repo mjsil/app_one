@@ -14,7 +14,7 @@ import Container from '../../components/Container';
 
 import {
         Content, ContentHeader, Header, Icon, HeaderLabel, Ball, Banner, BannerLabel, Graphic, MoreInfo, Label, ContentValue, Currency,
-        Value, GraphicCurrency, GraphicGoal, Cards, Card, CardTitle, Contracts, Title, ContractTitle, Contract, Name, Description, Date,
+        Value, GraphicCurrency, GraphicGoal, Cards, Card, CardTitle, Infos, Title, ContractTitle, Info, Name, Description, Date,
         State, LabelState
 } from './styles';
 
@@ -24,7 +24,8 @@ const Dashboard = () => {
 
     const isIos = Platform.OS === 'ios' ? true : false;
     const navigation = useNavigation();
-    const [constracts, setContracts] = useState([]);
+    const [contracts, setContracts] = useState([]);
+    const [prospections, setProspections] = useState([]);
     const [goalHeight, setGoalHeight] = useState(0); //META
     const [currencyHeight, setCurrencyHeight] = useState(0); //ATUAL
     const [userName, setUserName] = useState('');
@@ -33,12 +34,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         const getContracts = async() => {
-            const getToken = await AsyncStorage.getItem('loginToken');
-
-            if(getToken) {
-                setToken(getToken);
-            }
-
             try {
                 const response = await api.get('/contracts', {
                     headers: {
@@ -58,11 +53,37 @@ const Dashboard = () => {
     }, [token]);
 
     useEffect(() => {
+        const getProspections = async() => {
+            try {
+                const response = await api.get('/prospections', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setProspections(response.data.Prospections);
+            } catch(err) {
+                console.log('ERRO: ', err);
+
+                //COLOLAR MODAL QUE NÃO ENCONTROU PROSPECÇÕES
+            }
+        }
+
+        getProspections();
+    }, [token]);
+
+    useEffect(() => {
+
         const getUserName = async() => {
             const getName = await AsyncStorage.getItem('userName');
+            const getToken = await AsyncStorage.getItem('loginToken');
 
             if(getName) {
                 setUserName(getName);
+            }
+
+            if(getToken) {
+                setToken(getToken);
             }
         }
 
@@ -93,11 +114,24 @@ const Dashboard = () => {
         navigation.navigate('Contracts');
     }
 
+    const goProspections = () => {
+        navigation.navigate('Prospections');
+    }
+
     const goContractInfo = (contract) => {
         navigation.navigate('More', {
             info: {
                 ...contract,
                 contract: true,
+            }
+        });
+    }
+
+    const goProspectionInfo = (prospection) => {
+        navigation.navigate('More', {
+            info: {
+                ...prospection,
+                prospection: true,
             }
         });
     }
@@ -154,7 +188,7 @@ const Dashboard = () => {
                         <Value>150</Value>
                     </Card>
                 </Cards>
-                <Contracts>
+                <Infos>
                     <Header>
                         <Title>Contratos</Title>
                         <Icon onPress={() => goContracts()}>
@@ -163,8 +197,8 @@ const Dashboard = () => {
                         </Icon>
                     </Header>
                     {
-                        constracts.map((contract, index) => (
-                            <Contract key={index} onPress={() => goContractInfo(contract)}>
+                        contracts.map((contract, index) => (
+                            <Info key={index} onPress={() => goContractInfo(contract)}>
                                 <Description>
                                     <Name>Código: {contract.CODCONTRATO}</Name>
                                     <Date>Data:
@@ -175,13 +209,51 @@ const Dashboard = () => {
                                         )}
                                     </Date>
                                 </Description>
-                                <State>
+                                <State cod={2}>
                                     <LabelState>Ativo</LabelState>
                                 </State>
-                            </Contract>
+                            </Info>
                         ))
                     }
-                </Contracts>
+                </Infos>
+                <Infos>
+                    <Header>
+                        <Title>Prospecções</Title>
+                        <Icon onPress={() => goProspections()}>
+                            <FontAwesome name='eye' size={22} color='#41484A' />
+                            <ContractTitle>Ver Todas</ContractTitle>
+                        </Icon>
+                    </Header>
+                    {
+                        prospections.map((prospection, index) => (
+                            <Info key={index} onPress={() => goProspectionInfo(prospection)} prospection={true}>
+                                <Description>
+                                    <Name>Empresa: {prospection.EMPRESA}</Name>
+                                    <Date>Data:
+                                        {format(parseISO(prospection.DATACADASTRO),
+                                            " dd 'de' MMMM 'de' yyyy'",{
+                                                locale: ptBR
+                                            }
+                                        )}
+                                    </Date>
+                                </Description>
+                                <State prospection={true} style={{ width: '100%' }} cod={prospection.CODSTATUSPROSPECCAO}>
+                                    <LabelState>
+                                        {
+                                            (prospection.CODSTATUSPROSPECCAO === 1)
+                                            ?   'Em Digitação'
+                                            :   (prospection.CODSTATUSPROSPECCAO === 2)
+                                            ?   'Contrato Gerado'
+                                            :   (prospection.CODSTATUSPROSPECCAO === 3)
+                                            ?   'Cliente Desistiu'
+                                            :   'Sem Status'
+                                        }
+                                    </LabelState>
+                                </State>
+                            </Info>
+                        ))
+                    }
+                </Infos>
             </Content>
         </Container>
     );

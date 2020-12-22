@@ -21,20 +21,22 @@ export const HeaderLabel = styled.Text`
 `;
 
 export const Content = styled.View`
-    padding: 8px 0;
+    flex: 1;
 `;
 
 export const Option = styled.TouchableOpacity`
     flex-direction: row;
     align-items: center;
-    border-bottom-width: 1px;
     border-color: #41484A;
     padding: 16px;
+    justify-content: ${props => (props.versao ? 'center' : 'flex-start')};
+    background: ${props => (props.versao ? '#eee' : '#fff')};;
+    margin: 8px 0 0;
 `;
 
 export const Label = styled.Text`
-    margin: 0 0 0 15px;
+    margin: ${props => (props.versao ? '0' : '0 0 0 15px')};
     color: #41484A;
-    font-weight: 700;
+    font-weight: ${props => (props.versao ? '500' : '700')};
     font-size: 18px;
 `;

@@ -16,6 +16,7 @@ import Mural from './pages/Mural';
 import Profile from './pages/Profile';
 import News from './pages/News';
 import Contracts from './pages/Contracts';
+import Prospections from './pages/Prospections';
 import More from './pages/More';
 import Award from './pages/Award';
 
@@ -93,6 +94,7 @@ const Routes = () => {
                     <StackNavigation.Screen name='SignUp' component={SignUp} />
                     <StackNavigation.Screen name='News' component={News} />
                     <StackNavigation.Screen name='Contracts' component={Contracts} />
+                    <StackNavigation.Screen name='Prospections' component={Prospections} />
                     <StackNavigation.Screen name='More' component={More} />
                 </StackNavigation.Navigator>
             </NavigationContainer>
