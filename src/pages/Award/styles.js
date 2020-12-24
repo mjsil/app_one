@@ -3,12 +3,12 @@ import styled from 'styled-components/native';
 export const ContentFull = styled.View`
     flex: 1;
     background: #eee;
-    padding-bottom: ${props => (props.isIos ? "16px" : "0")};
+    padding-bottom: ${(props) => (props.isIos ? '16px' : '0')};
 `;
 
 export const Header = styled.View`
     flex-direction: row;
-    background: #79CB39;
+    background: #79cb39;
     align-items: center;
     padding: 16px;
 `;
@@ -33,10 +33,11 @@ export const Contract = styled.View`
 
 export const ContentName = styled.View`
     flex-direction: row;
-    align-items: center;
+    margin: 0 0 5px;
 `;
 
 export const Name = styled.Text`
+    flex: 1;
     color: #000;
     font-size: 16px;
     font-weight: 700;
@@ -46,7 +47,7 @@ export const Content = styled.View`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding: 16px 0;
+    padding: 11px 0 16px;
 `;
 
 export const ContentValue = styled.View`
@@ -54,7 +55,7 @@ export const ContentValue = styled.View`
 `;
 
 export const Label = styled.Text`
-    color: #41484A;
+    color: #41484a;
     font-size: 14px;
 `;
 
@@ -66,7 +67,7 @@ export const Value = styled.Text`
 `;
 
 export const Card = styled.View`
-    background: ${props => (props.pago ? "#79CB39" : "#FF9900")};
+    background: ${(props) => (props.pago ? '#79CB39' : '#FF9900')};
     padding: 5px 10px;
     border-radius: 10px;
 `;

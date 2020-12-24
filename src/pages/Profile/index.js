@@ -8,7 +8,12 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import Container from '../../components/Container';
 
 import {
-        ContentFull, Header, HeaderLabel, Content, Option, Label
+    ContentFull,
+    Header,
+    HeaderLabel,
+    Content,
+    Option,
+    Label,
 } from './styles';
 
 const Profile = () => {
@@ -16,34 +21,34 @@ const Profile = () => {
     const isIos = Platform.OS === 'ios' ? true : false;
     const navigation = useNavigation();
     const message = `Olá One Elevadores, estou entrando em contato pois gostaria de ajuda em: `;
-    const oneEmail = 'm.j.silveira@outlook.com';
+    const oneEmail = 'contato@oneelevadores.com.br';
 
     useEffect(() => {
-        const getUserName = async() => {
+        const getUserName = async () => {
             const getName = await AsyncStorage.getItem('userName');
 
-            if(getName) {
+            if (getName) {
                 setUserName(getName);
             }
-        }
+        };
 
         getUserName();
-    },[]);
+    }, []);
 
     const sendMail = () => {
         MailComposer.composeAsync({
-            subject: `Ajuda - One Elevadores`,
+            subject: `Contato - One Elevadores`,
             recipients: [oneEmail],
-            body: message
+            body: message,
         });
-    }
+    };
 
-    const goHome = async() => {
+    const goHome = async () => {
         await AsyncStorage.removeItem('loginToken');
         await AsyncStorage.removeItem('userName');
 
-        navigation.navigate("Home");
-    }
+        navigation.navigate('Home');
+    };
 
     return (
         <Container>
@@ -54,16 +59,28 @@ const Profile = () => {
                 <Content>
                     <View style={{ flex: 1 }}>
                         <Option onPress={() => sendMail()}>
-                            <MaterialCommunityIcons name="email-outline" size={26} color="#79CB39" />
+                            <MaterialCommunityIcons
+                                name="email-outline"
+                                size={26}
+                                color="#79CB39"
+                            />
                             <Label>Ajuda</Label>
                         </Option>
                         <Option onPress={() => {}}>
-                            <MaterialCommunityIcons name="book-open-outline" size={26} color="#79CB39" />
+                            <MaterialCommunityIcons
+                                name="book-open-outline"
+                                size={26}
+                                color="#79CB39"
+                            />
                             <Label>Termos</Label>
                         </Option>
                     </View>
                     <Option onPress={() => goHome()}>
-                        <FontAwesome name="power-off" size={26} color="#79CB39" />
+                        <FontAwesome
+                            name="power-off"
+                            size={26}
+                            color="#79CB39"
+                        />
                         <Label>Sair</Label>
                     </Option>
                     <View>
@@ -75,6 +92,6 @@ const Profile = () => {
             </ContentFull>
         </Container>
     );
-}
+};
 
 export default Profile;

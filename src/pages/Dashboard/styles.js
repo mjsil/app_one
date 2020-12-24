@@ -6,11 +6,11 @@ export const Content = styled.ScrollView`
 `;
 
 export const ContentHeader = styled.View`
-    background: #79CB39;
-    height: ${props => (`${((props.windowHeight)/4)}px`)};
+    background: #79cb39;
+    height: ${(props) => `${props.windowHeight / 4}px`};
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    margin-bottom: ${props => (props.windowHeight < 650 ? '32px' : '0')};
+    margin-bottom: ${(props) => (props.windowHeight < 650 ? '32px' : '0')};
 `;
 
 export const Header = styled.View`
@@ -27,7 +27,7 @@ export const Icon = styled.TouchableOpacity`
 `;
 
 export const Ball = styled.View`
-    background: #FF9900;
+    background: #ff9900;
     height: 13px;
     width: 13px;
     border-radius: 6.5px;
@@ -60,23 +60,24 @@ export const Graphic = styled.View`
 `;
 
 export const GraphicCurrency = styled.View`
-    height: ${props => (props.graphicHeight > 0 ? `${props.graphicHeight}px` : '5px')};
+    height: ${(props) =>
+        props.graphicHeight > 0 ? `${props.graphicHeight}px` : '5px'};
     width: 36px;
-    background: #79CB39;
+    background: #79cb39;
     border-radius: 10px;
     border-width: 1px;
-    border-color: #79CB39;
+    border-color: #79cb39;
     margin-right: 12px;
     margin-top: auto;
 `;
 
 export const GraphicGoal = styled.View`
-    max-height: ${props => (`${props.graphicHeight}px`)};
+    max-height: ${(props) => `${props.graphicHeight}px`};
     width: 36px;
-    background: #41484A;
+    background: #41484a;
     border-radius: 10px;
     border-width: 1px;
-    border-color: #41484A;
+    border-color: #41484a;
 `;
 
 export const MoreInfo = styled.View`
@@ -84,9 +85,9 @@ export const MoreInfo = styled.View`
 `;
 
 export const Label = styled.Text`
-    color: ${props => (props.currency ? "#fff" : "#41484A")};
+    color: ${(props) => (props.currency ? '#fff' : '#41484A')};
     font-weight: 700;
-    font-size: ${props => (props.currency ? "18px" : "18px")};
+    font-size: ${(props) => (props.currency ? '18px' : '18px')};
 `;
 
 export const ContentValue = styled.View`
@@ -97,13 +98,13 @@ export const ContentValue = styled.View`
 
 export const Currency = styled.View`
     padding: 5px 10px;
-    background: ${props => (props.meta ? "#41484A" : "#79CB39")};;
+    background: ${(props) => (props.meta ? '#41484A' : '#79CB39')};
     margin-right: 10px;
     border-radius: 10px;
 `;
 
 export const Value = styled.Text`
-    color: #41484A;
+    color: #41484a;
     font-weight: 700;
     font-size: 27px;
 `;
@@ -125,7 +126,7 @@ export const Card = styled.View`
 
 export const CardTitle = styled.Text`
     font-size: 14px;
-    color: #41484A;
+    color: #41484a;
     margin: 0 0 5px;
     font-weight: 700;
 `;
@@ -134,54 +135,49 @@ export const Infos = styled.View``;
 
 export const Title = styled.Text`
     font-size: 20px;
-    color: #41484A;
+    color: #41484a;
     font-weight: 700;
 `;
 
 export const ContractTitle = styled.Text`
     font-size: 14px;
-    color: #79CB39;
+    color: #79cb39;
     margin: 1px 0 0 5px;
     font-weight: 700;
 `;
 
 export const Info = styled.TouchableOpacity`
-    flex-direction: ${props => (props.prospection ? 'column' : 'row')};
+    flex-direction: ${(props) => (props.prospection ? 'column' : 'row')};
     justify-content: space-between;
-    align-items: center;
+    align-items: ${(props) => (props.prospection ? 'flex-start' : 'center')};
     padding: 16px;
     background: #fff;
     border-radius: 10px;
     margin: 8px 16px;
 `;
 
-export const Name = styled.Text`
-    color: #41484A;
+export const LabelContract = styled.Text`
+    color: #41484a;
+    font-size: 14px;
+`;
+
+export const Description = styled.View`
+    flex: 1;
+`;
+
+export const ValueContract = styled.Text`
+    color: #41484a;
     font-size: 14px;
     font-weight: 700;
 `;
 
-export const Description = styled.View``;
-
-export const Date = styled.Text`
-    color: #41484A;
-    font-size: 14px;
-    margin: 5px 0 0;
-`;
-
 export const State = styled.View`
-    background: ${props => (
-        props.cod === 2
-        ? "#79CB39"
-        : props.cod === 3
-        ? "#e61919"
-        : "#e5e619"
-    )};
+    background: ${(props) =>
+        props.cod === 2 ? '#79CB39' : props.cod === 3 ? '#e61919' : '#e5e619'};
     border-radius: 10px;
     padding: 5px 10px;
     align-items: center;
     justify-content: center;
-    margin:  ${props => (props.prospection ? '16px 0 0' : '0')};
 `;
 
 export const LabelState = styled.Text`
@@ -192,3 +188,6 @@ export const LabelState = styled.Text`
     text-transform: uppercase;
 `;
 
+export const Line = styled.View`
+    margin: 5px 0 0;
+`;

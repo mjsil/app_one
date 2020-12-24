@@ -38,11 +38,12 @@ import {
     Title,
     ContractTitle,
     Info,
-    Name,
+    LabelContract,
     Description,
-    Date,
+    ValueContract,
     State,
     LabelState,
+    Line,
 } from './styles';
 
 const Dashboard = () => {
@@ -270,17 +271,25 @@ const Dashboard = () => {
                             onPress={() => goContractInfo(contract)}
                         >
                             <Description>
-                                <Name>Código: {contract.CODCONTRATO}</Name>
-                                <Date>
+                                <LabelContract>
+                                    Cliente:{' '}
+                                    <ValueContract>
+                                        {contract.RAZAOSOCIAL}
+                                    </ValueContract>
+                                </LabelContract>
+                                <Line />
+                                <LabelContract>
                                     Data:
-                                    {format(
-                                        parseISO(contract.DATAINICIO),
-                                        " dd 'de' MMMM 'de' yyyy'",
-                                        {
-                                            locale: ptBR,
-                                        }
-                                    )}
-                                </Date>
+                                    <ValueContract>
+                                        {format(
+                                            parseISO(contract.DATAINICIO),
+                                            " dd 'de' MMMM 'de' yyyy'",
+                                            {
+                                                locale: ptBR,
+                                            }
+                                        )}
+                                    </ValueContract>
+                                </LabelContract>
                             </Description>
                             <State cod={2}>
                                 <LabelState>Ativo</LabelState>
@@ -303,21 +312,33 @@ const Dashboard = () => {
                             prospection={true}
                         >
                             <Description>
-                                <Name>Empresa: {prospection.EMPRESA}</Name>
-                                <Date>
+                                <LabelContract>
+                                    Cliente:{' '}
+                                    <ValueContract>
+                                        {prospection.RAZAOSOCIAL ||
+                                            prospection.CODPROSPECCAO}
+                                    </ValueContract>
+                                </LabelContract>
+                                <Line />
+                                <LabelContract>
                                     Data:
-                                    {format(
-                                        parseISO(prospection.DATACADASTRO),
-                                        " dd 'de' MMMM 'de' yyyy'",
-                                        {
-                                            locale: ptBR,
-                                        }
-                                    )}
-                                </Date>
+                                    <ValueContract>
+                                        {format(
+                                            parseISO(prospection.DATACADASTRO),
+                                            " dd 'de' MMMM 'de' yyyy'",
+                                            {
+                                                locale: ptBR,
+                                            }
+                                        )}
+                                    </ValueContract>
+                                </LabelContract>
                             </Description>
                             <State
-                                prospection={true}
-                                style={{ width: '100%' }}
+                                style={{
+                                    flex: 1,
+                                    width: '100%',
+                                    marginTop: 16,
+                                }}
                                 cod={prospection.CODSTATUSPROSPECCAO}
                             >
                                 <LabelState>

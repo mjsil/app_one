@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import intl from 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+import { addMonths, isBefore, parseISO } from 'date-fns';
+import { format } from 'date-fns-tz';
+import { ptBR } from 'date-fns/locale';
 
 import api from '../../services';
 
@@ -21,6 +26,7 @@ import {
     Label,
     Value,
 } from './styles';
+import addDays from 'date-fns/addDays';
 
 const allNews = [
     {
@@ -66,9 +72,10 @@ const Award = () => {
 
     const [contracts, setContracts] = useState([]);
     const [token, setToken] = useState('');
+    const isBeforeDate = [];
 
     useEffect(() => {
-        const getUserName = async () => {
+        const getLocalStorage = async () => {
             const getToken = await AsyncStorage.getItem('loginToken');
 
             if (getToken) {
@@ -76,13 +83,13 @@ const Award = () => {
             }
         };
 
-        getUserName();
+        getLocalStorage();
     }, []);
 
     useEffect(() => {
         const getContracts = async () => {
             try {
-                const response = await api.get('/all/contracts/active', {
+                const response = await api.get('/all/contracts', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -99,6 +106,29 @@ const Award = () => {
         getContracts();
     }, [token]);
 
+    const checkDateContract = (contract) => {
+        const date = new Date(contract.DATAINICIO);
+        const newDate = addDays(addMonths(date, contract.QTDMESESCARENCIA), 1);
+
+        const fullDate = addMonths(newDate, newDate.getDate() <= 15 ? 1 : 2);
+
+        const newFullDate = new Date(
+            `${fullDate.getFullYear()}/${
+                `${fullDate.getMonth() + 1}`.length < 2
+                    ? `0${fullDate.getMonth() + 1}`
+                    : fullDate.getMonth() + 1
+            }/15`
+        );
+
+        const checkIsAfter = isBefore(newFullDate, new Date());
+
+        isBeforeDate.push(checkIsAfter);
+
+        return format(newFullDate, 'dd/MM/yyyy', {
+            locale: ptBR,
+        });
+    };
+
     return (
         <Container>
             <ContentFull isIos={isIos}>
@@ -111,29 +141,40 @@ const Award = () => {
                             paddingTop: 16,
                         }}
                     >
-                        {allNews.map((news, index) => (
+                        {contracts.map((contract, index) => (
                             <Contract key={index} onPress={() => {}}>
                                 <ContentName>
                                     <Label>Cliente: </Label>
-                                    <Name>{news.contrato}</Name>
+                                    <Name>{contract.RAZAOSOCIAL}</Name>
                                 </ContentName>
                                 <ContentName>
                                     <Label>Contrato: </Label>
-                                    <Name>{news.contrato}</Name>
+                                    <Name>{contract.CODCONTRATO}</Name>
                                 </ContentName>
                                 <Content>
                                     <ContentValue>
                                         <Label>Valor</Label>
-                                        <Value>{news.valor}</Value>
+                                        <Value>
+                                            R${' '}
+                                            {new Intl.NumberFormat(
+                                                'pt-BR'
+                                            ).format(
+                                                (
+                                                    contract.VALORTOTAL / 2
+                                                ).toFixed(2)
+                                            )}
+                                        </Value>
                                     </ContentValue>
                                     <ContentValue>
                                         <Label>Disponível</Label>
-                                        <Value>{news.date}</Value>
+                                        <Value>
+                                            {checkDateContract(contract)}
+                                        </Value>
                                     </ContentValue>
                                 </Content>
-                                <Card pago={news.pago}>
+                                <Card pago={isBeforeDate[index]}>
                                     <CardLabel>
-                                        {news.pago
+                                        {isBeforeDate[index]
                                             ? 'Pagamento Efetuado'
                                             : 'Aguarde Pagamento'}
                                     </CardLabel>
