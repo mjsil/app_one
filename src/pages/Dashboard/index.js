@@ -47,16 +47,16 @@ import {
 } from './styles';
 
 const Dashboard = () => {
-    const metaAtual = 13000;
-
     const windowHeight = Dimensions.get('window').height;
     const isIos = Platform.OS === 'ios' ? true : false;
     const navigation = useNavigation();
 
     const [contracts, setContracts] = useState([]);
     const [contractsCurrent, setContractsCurrent] = useState([]);
+    const [goal, setGoal] = useState({});
     const [prospections, setProspections] = useState([]);
     const [goalHeight, setGoalHeight] = useState(0); //META
+    const [metaAtual, setMetaAtual] = useState(0);
     const [userName, setUserName] = useState('');
     const [token, setToken] = useState('');
 
@@ -78,6 +78,26 @@ const Dashboard = () => {
         };
 
         getAllContractsCurrent();
+    }, [token]);
+
+    useEffect(() => {
+        const getGoals = async () => {
+            try {
+                const response = await api.get('/goals', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setGoal(response.data[0]);
+            } catch (err) {
+                console.log('ERRO: ', err);
+
+                //COLOLAR MODAL QUE NÃO ENCONTROU OS CONTRATOS
+            }
+        };
+
+        getGoals();
     }, [token]);
 
     useEffect(() => {
@@ -153,19 +173,36 @@ const Dashboard = () => {
         return new Intl.NumberFormat('pt-BR').format(total);
     }, [contractsCurrent]);
 
+    const goalContract = useMemo(() => {
+        return goal.qtd_contratos;
+    }, [goal]);
+
+    const goalMoney = useMemo(() => {
+        const money = parseFloat(
+            String(goal.meta_valor).replace('.', '').replace(',', '.')
+        );
+
+        const newMoney = new Intl.NumberFormat('pt-BR').format(money);
+
+        setMetaAtual(newMoney);
+
+        return newMoney;
+    }, [goal]);
+
     const currencyHeight = useMemo(() => {
-        const currencyX =
+        const currencyX = (
             (goalHeight *
                 parseFloat(totalMoney.replace('.', '').replace(',', '.'))) /
-            metaAtual;
-        const currency = ((currencyX * 100) / goalHeight).toFixed(2);
+            metaAtual
+        ).toFixed(2);
+        const currency = (currencyX * 100) / goalHeight;
 
         if (currency > 100) {
             return goalHeight;
         }
 
         return (currency * goalHeight) / 100;
-    }, [contractsCurrent]);
+    }, [metaAtual]);
 
     const goNews = () => {
         navigation.navigate('News');
@@ -238,7 +275,7 @@ const Dashboard = () => {
                                 <Currency meta={true}>
                                     <Label currency={true}>R$</Label>
                                 </Currency>
-                                <Value>{metaAtual},00</Value>
+                                <Value>{goalMoney}</Value>
                             </ContentValue>
                         </MoreInfo>
                     </BannerLabel>
@@ -254,7 +291,7 @@ const Dashboard = () => {
                     </Card>
                     <Card>
                         <CardTitle>Meta Atual</CardTitle>
-                        <Value>150</Value>
+                        <Value>{goalContract}</Value>
                     </Card>
                 </Cards>
                 <Infos>
