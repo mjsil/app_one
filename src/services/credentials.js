@@ -1,7 +1,7 @@
 const institution = {
-    email: 'one@one.com',
+    email: 'oneelevadores@oneelevadores.com',
     password: '123456',
     institutionId: 9,
-}
+};
 
 export default institution;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
@@ -7,7 +6,6 @@ import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import { ptBR } from 'date-fns/locale';
 
-import api from '../../services';
 import { base_url } from '../../services/1net';
 
 import Zoom from './zoom';

@@ -11,6 +11,8 @@ import intl from 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
 import api from '../../services';
+import api1Net from '../../services/1net';
+import dataInstitution from '../../services/credentials';
 
 import Container from '../../components/Container';
 
@@ -59,6 +61,66 @@ const Dashboard = () => {
     const [metaAtual, setMetaAtual] = useState(0);
     const [userName, setUserName] = useState('');
     const [token, setToken] = useState('');
+    const [token1Net, setToken1Net] = useState('');
+    const [notification, setNotification] = useState('');
+    const [iconNotification, setIconNotification] = useState(false);
+
+    useEffect(() => {
+        const getToken1Net = async () => {
+            const getToken1Net = await AsyncStorage.getItem('token');
+
+            if (getToken1Net) {
+                setToken1Net(getToken1Net);
+            }
+        };
+
+        getToken1Net();
+    }, []);
+
+    useEffect(() => {
+        const getMessage = async () => {
+            const getMessage = await AsyncStorage.getItem('notification');
+
+            if (getMessage) {
+                if (getMessage !== notification) {
+                    setIconNotification(true);
+
+                    AsyncStorage.setItem('notification', notification);
+                }
+            }
+        };
+
+        getMessage();
+    }, [notification]);
+
+    useEffect(() => {
+        const getNotification = async () => {
+            try {
+                const response = await api1Net.get(
+                    `/institutions/${dataInstitution.institutionId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token1Net}`,
+                        },
+                    }
+                );
+
+                if (response.data.institutional_message) {
+                    setNotification(response.data.institutional_message);
+
+                    return;
+                }
+
+                setNotification('Nenhuma notificação até o momento!');
+            } catch (err) {
+                console.log('ERRO: ', err);
+
+                //COLOLAR MODAL QUE NÃO ENCONTROU DADOS DO MURAL
+            }
+        };
+
+        getNotification();
+    }, [token]);
 
     useEffect(() => {
         const getAllContractsCurrent = async () => {
@@ -205,7 +267,11 @@ const Dashboard = () => {
     }, [metaAtual]);
 
     const goNews = () => {
-        navigation.navigate('News');
+        navigation.navigate('News', {
+            info: {
+                notification: notification,
+            },
+        });
     };
 
     const goContracts = () => {
@@ -242,8 +308,12 @@ const Dashboard = () => {
                 >
                     <Header>
                         <HeaderLabel>{userName}</HeaderLabel>
-                        <Icon onPress={() => goNews()}>
-                            <Ball />
+                        <Icon
+                            onPress={() => (
+                                setIconNotification(false), goNews()
+                            )}
+                        >
+                            {iconNotification && <Ball />}
                             <Ionicons
                                 name="md-notifications"
                                 size={30}

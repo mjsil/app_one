@@ -1,75 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 
 import Container from '../../components/Container';
 
 import {
-    Content, Header, Icon, HeaderLabel, Contracts, Contract, Name, Date
+    Content,
+    Header,
+    Icon,
+    HeaderLabel,
+    Contract,
+    Message,
 } from './styles';
-
-const allNews = [
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },{
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-    {
-        name: "Edifício Terra Brasílis",
-        date: "12/09/2020",
-    },
-]
 
 const News = () => {
     const isIos = Platform.OS === 'ios' ? true : false;
     const navigation = useNavigation();
+    const router = useRoute();
+    const [notification, setNotification] = useState({});
+
+    useEffect(() => {
+        setNotification(router.params.info);
+    }, []);
 
     const goBack = () => {
         navigation.goBack();
-    }
+    };
 
     return (
         <Container>
@@ -80,25 +37,12 @@ const News = () => {
                     </Icon>
                     <HeaderLabel>Avisos</HeaderLabel>
                 </Header>
-                <ScrollView>
-                    <Contracts
-                        contentContainerStyle={{
-                            paddingTop: 16,
-                        }}
-                    >
-                        {
-                            allNews.map((news, index) => (
-                                <Contract key={index} onPress={() => {}}>
-                                    <Name>{news.name}</Name>
-                                    <Date>{news.date}</Date>
-                                </Contract>
-                            ))
-                        }
-                    </Contracts>
-                </ScrollView>
+                <Contract>
+                    <Message>{notification.notification}</Message>
+                </Contract>
             </Content>
         </Container>
     );
-}
+};
 
 export default News;

@@ -3,18 +3,18 @@ import styled from 'styled-components/native';
 export const Content = styled.View`
     flex: 1;
     background: #eee;
-    padding-bottom: ${props => (props.isIos ? "16px" : "0")};
+    padding-bottom: ${(props) => (props.isIos ? '16px' : '0')};
 `;
 
 export const Header = styled.View`
     flex-direction: row;
-    background: #79CB39;
+    background: #79cb39;
     align-items: center;
     padding: 16px;
 `;
 
 export const Icon = styled.TouchableOpacity`
-    background: #0D8613;
+    background: #0d8613;
     align-items: center;
     justify-content: center;
     height: 39px;
@@ -29,10 +29,6 @@ export const HeaderLabel = styled.Text`
     color: #fff;
 `;
 
-export const Contracts = styled.ScrollView`
-    padding: 0 16px;
-`;
-
 export const Contract = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: space-between;
@@ -40,17 +36,11 @@ export const Contract = styled.TouchableOpacity`
     padding: 16px;
     background: #fff;
     border-radius: 10px;
-    margin: 0 0 16px;
+    margin: 16px;
 `;
 
-export const Name = styled.Text`
-    color: #41484A;
-    font-size: 14px;
+export const Message = styled.Text`
+    color: #41484a;
+    font-size: 18px;
     font-weight: 700;
-`;
-
-export const Date = styled.Text`
-    color: #41484A;
-    font-size: 14px;
-    margin: 5px 0 0;
 `;
